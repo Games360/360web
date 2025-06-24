@@ -1,141 +1,147 @@
-function loophalaman(totalEntries) {
-    var output = "";
-    var leftPageCount = parseInt(numshowpage / 2);
-    
-    // Ajustar el número de páginas a mostrar
-    if (leftPageCount == numshowpage - leftPageCount) {
-        numshowpage = 2 * leftPageCount + 1;
+function loophalaman(a) {
+    let e = "";
+    let nomerkiri = parseInt(numshowpage / 2);
+    if (nomerkiri === numshowpage - nomerkiri) {
+        numshowpage = 2 * nomerkiri + 1;
     }
+    let mulai = nomerhal - nomerkiri;
+    if (mulai < 1) {
+        mulai = 1;
+    }
+    let maksimal = Math.ceil(a / postperpage);
+    if (maksimal - 1 === a / postperpage) {
+        maksimal -= 1;
+    }
+    let akhir = mulai + numshowpage - 1;
+    if (akhir > maksimal) {
+        akhir = maksimal;
+    }
+    e += `<span class='showpageOf'>Page ${nomerhal} of ${maksimal}</span>`;
 
-    var startPage = nomerhal - leftPageCount;
-    if (startPage < 1) startPage = 1;
-
-    var maxPages = Math.ceil(totalEntries / postperpage);
-    var endPage = startPage + numshowpage - 1;
-    if (endPage > maxPages) endPage = maxPages;
-
-    output += "<span class='showpageOf'>Page " + nomerhal + " of " + maxPages + "</span>";
-
-    // Enlace a la página anterior
     if (nomerhal > 1) {
-        var previousPage = nomerhal - 1;
-        output += (nomerhal === 2) 
-            ? (jenis === "page" ? `<span class="showpage"><a href="${home_page}">${upPageWord}</a></span>` 
-                                : `<span class="showpageNum"><a href="/search/label/${lblname1}?&max-results=${postperpage}">${upPageWord}</a></span>`)
-            : (jenis === "page" ? `<span class="showpageNum"><a href="#" onclick="redirectpage(${previousPage}); return false;">${upPageWord}</a></span>` 
-                                : `<span class="showpageNum"><a href="#" onclick="redirectlabel(${previousPage}); return false;">${upPageWord}</a></span>`);
+        let s = nomerhal - 1;
+        e += (numshowpage === 2) ? 
+            (jenis === "page" ? `<span class="showpage"><a href="${home_page}">${upPageWord}</a></span>` : 
+            `<span class="showpageNum"><a href="/search/label/${lblname1}?&max-results=${postperpage}">${upPageWord}</a></span>`) :
+            (jenis === "page" ? `<span class="showpageNum"><a href="#" onclick="redirectpage(${s}); return false;">${upPageWord}</a></span>` : 
+            `<span class="showpageNum"><a href="#" onclick="redirectlabel(${s}); return false;">${upPageWord}</a></span>`);
     }
 
-    // Enlace a la primera página
-    if (startPage > 1) {
-        output += (jenis === "page") 
-            ? `<span class="showpageNum"><a href="${home_page}">1</a></span>` 
-            : `<span class="showpageNum"><a href="/search/label/${lblname1}?&max-results=${postperpage}">1</a></span>`;
+    if (mulai > 1) {
+        e += (jenis === "page") ? 
+            `<span class="showpageNum"><a href="${home_page}">1</a></span>` : 
+            `<span class="showpageNum"><a href="/search/label/${lblname1}?&max-results=${postperpage}">1</a></span>`;
     }
 
-    // Generar enlaces de páginas intermedias
-    for (var r = startPage; r <= endPage; r++) {
-        output += (nomerhal === r) 
-            ? `<span class="showpagePoint">${r}</span>` 
-            : (r === 1) 
-                ? (jenis === "page" ? `<span class="showpageNum"><a href="${home_page}">1</a></span>` 
-                                    : `<span class="showpageNum"><a href="/search/label/${lblname1}?&max-results=${postperpage}">1</a></span>`)
-                : (jenis === "page" ? `<span class="showpageNum"><a href="#" onclick="redirectpage(${r}); return false;">${r}</a></span>` 
-                                    : `<span class="showpageNum"><a href="#" onclick="redirectlabel(${r}); return false;">${r}</a></span>`);
+    if (mulai > 2) {
+        e += ""; // Aquí puedes agregar más lógica si es necesario
     }
 
-    // Enlace a la última página
-    if (endPage < maxPages) {
-        output += (jenis === "page") 
-            ? `<span class="showpageNum"><a href="#" onclick="redirectpage(${maxPages}); return false;">${maxPages}</a></span>` 
-            : `<span class="showpageNum"><a href="#" onclick="redirectlabel(${maxPages}); return false;">${maxPages}</a></span>`;
+    for (let r = mulai; r <= akhir; r++) {
+        e += (nomerhal === r) ? 
+            `<span class="showpagePoint">${r}</span>` : 
+            (r === 1 ? 
+            (jenis === "page" ? `<span class="showpageNum"><a href="${home_page}">1</a></span>` : 
+            `<span class="showpageNum"><a href="/search/label/${lblname1}?&max-results=${postperpage}">1</a></span>`) : 
+            (jenis === "page" ? `<span class="showpageNum"><a href="#" onclick="redirectpage(${r}); return false;">${r}</a></span>` : 
+            `<span class="showpageNum"><a href="#" onclick="redirectlabel(${r}); return false;">${r}</a></span>`));
     }
 
-    // Enlace a la página siguiente
-    var nextPage = parseInt(nomerhal) + 1;
-    if (nomerhal < maxPages) {
-        output += (jenis === "page") 
-            ? `<span class="showpageNum"><a href="#" onclick="redirectpage(${nextPage}); return false;">${downPageWord}</a></span>` 
-            : `<span class="showpageNum"><a href="#" onclick="redirectlabel(${nextPage}); return false;">${downPageWord}</a></span>`;
+    if (akhir < maksimal - 1) {
+        e += ""; // Aquí puedes agregar más lógica si es necesario
     }
 
-    // Actualizar el contenido de la página
-    var pageAreaElements = document.getElementsByName("pageArea");
-    for (var i = 0; i < pageAreaElements.length; i++) {
-        pageAreaElements[i].innerHTML = output;
+    if (akhir < maksimal) {
+        e += (jenis === "page") ? 
+            `<span class="showpageNum"><a href="#" onclick="redirectpage(${maksimal}); return false;">${maksimal}</a></span>` : 
+            `<span class="showpageNum"><a href="#" onclick="redirectlabel(${maksimal}); return false;">${maksimal}</a></span>`;
     }
 
-    // Actualizar el blog pager si existe
-    var blogPager = document.getElementById("blog-pager");
-    if (blogPager) {
-        blogPager.innerHTML = output;
+    let n = parseInt(nomerhal) + 1;
+    if (nomerhal < maksimal) {
+        e += (jenis === "page") ? 
+            `<span class="showpageNum"><a href="#" onclick="redirectpage(${n}); return false;">${downPageWord}</a></span>` : 
+            `<span class="showpageNum"><a href="#" onclick="redirectlabel(${n}); return false;">${downPageWord}</a></span>`;
+    }
+
+    const t = document.getElementsByName("pageArea");
+    const l = document.getElementById("blog-pager");
+    for (let p = 0; p < t.length; p++) {
+        t[p].innerHTML = e;
+    }
+    if (t && t.length > 0) {
+        e = "";
+    }
+    if (l) {
+        l.innerHTML = e;
     }
 }
 
-function hitungtotaldata(data) {
-    var feed = data.feed;
-    var totalResults = parseInt(feed.openSearch$totalResults.$t, 10);
-    loophalaman(totalResults);
+function hitungtotaldata(a) {
+    const e = a.feed;
+    const s = parseInt(e.openSearch$totalResults.$t, 10);
+    loophalaman(s);
 }
 
 function halamanblogger() {
-    var activeUrl = urlactivepage;
-    if (activeUrl.indexOf("/search/label/") !== -1) {
-        lblname1 = activeUrl.indexOf("?updated-max") !== -1 
-            ? activeUrl.substring(activeUrl.indexOf("/search/label/") + 14, activeUrl.indexOf("?updated-max")) 
-            : activeUrl.substring(activeUrl.indexOf("/search/label/") + 14, activeUrl.indexOf("?&max"));
+    const a = urlactivepage;
+    if (a.indexOf("/search/label/") !== -1) {
+        lblname1 = a.indexOf("?updated-max") !== -1 ? 
+            a.substring(a.indexOf("/search/label/") + 14, a.indexOf("?updated-max")) : 
+            a.substring(a.indexOf("/search/label/") + 14, a.indexOf("?&max"));
     }
-
-    if (activeUrl.indexOf("?q=") === -1 && activeUrl.indexOf(".html") === -1) {
-        if (activeUrl.indexOf("/search/label/") === -1) {
+    if (a.indexOf("?q=") === -1 && a.indexOf(".html") === -1) {
+        if (a.indexOf("/search/label/") === -1) {
             jenis = "page";
-            nomerhal = activeUrl.indexOf("#PageNo=") !== -1 
-                ? activeUrl.substring(activeUrl.indexOf("#PageNo=") + 8) 
-                : 1;
-            loadScript(`${home_page}feeds/posts/summary?max-results=1&alt=json-in-script&callback=hitungtotaldata`);
+            nomerhal = a.indexOf("#PageNo=") !== -1 ? 
+                a.substring(a.indexOf("#PageNo=") + 8) : 1;
+            const script = document.createElement('script');
+            script.src = `${home_page}feeds/posts/summary?max-results=1&alt=json-in-script&callback=hitungtotaldata`;
+            document.head.appendChild(script);
         } else {
             jenis = "label";
-            if (activeUrl.indexOf("&max-results=") === -1) {
+            if (a.indexOf("&max-results=") === -1) {
                 postperpage = 20;
             }
-            nomerhal = activeUrl.indexOf("#PageNo=") !== -1 
-                ? activeUrl.substring(activeUrl.indexOf("#PageNo=") + 8) 
-                : 1;
-            loadScript(`${home_page}feeds/posts/summary/-/${lblname1}?alt=json-in-script&callback=hitungtotaldata&max-results=1`);
+            nomerhal = a.indexOf("#PageNo=") !== -1 ? 
+                a.substring(a.indexOf("#PageNo=") + 8) : 1;
+            const script = document.createElement('script');
+            script.src = `${home_page}feeds/posts/summary/-/${lblname1}?alt=json-in-script&callback=hitungtotaldata&max-results=1`;
+            document.head.appendChild(script);
         }
     }
 }
 
-function loadScript(src) {
-    var head = document.getElementsByTagName("head")[0];
-    var script = document.createElement("script");
-    script.type = "text/javascript";
-    script.src = src;
-    head.appendChild(script);
+function redirectpage(a) {
+    jsonstart = (a - 1) * postperpage;
+    nopage = a;
+    const script = document.createElement('script');
+    script.src = `${home_page}feeds/posts/summary?start-index=${jsonstart}&max-results=1&alt=json-in-script&callback=finddatepost`;
+    document.head.appendChild(script);
 }
 
-function redirectpage(pageNumber) {
-    var jsonStart = (pageNumber - 1) * postperpage;
-    nopage = pageNumber;
-    loadScript(`${home_page}feeds/posts/summary?start-index=${jsonStart}&max-results=1&alt=json-in-script&callback=finddatepost`);
+function redirectlabel(a) {
+    jsonstart = (a - 1) * postperpage;
+    nopage = a;
+    const script = document.createElement('script');
+    script.src = `${home_page}feeds/posts/summary/-/${lblname1}?start-index=${jsonstart}&max-results=1&alt=json-in-script&callback=finddatepost`;
+    document.head.appendChild(script);
 }
 
-function redirectlabel(pageNumber) {
-    var jsonStart = (pageNumber - 1) * postperpage;
-    nopage = pageNumber;
-    loadScript(`${home_page}feeds/posts/summary/-/${lblname1}?start-index=${jsonStart}&max-results=1&alt=json-in-script&callback=finddatepost`);
+function finddatepost(a) {
+    const post = a.feed.entry[0];
+    const e = post.published.$t.substring(0, 19) + post.published.$t.substring(23, 29);
+    const s = encodeURIComponent(e);
+    const r = (jenis === "page") ? 
+        `/search?updated-max=${s}&max-results=${postperpage}#PageNo=${nopage}` : 
+        `/search/label/${lblname1}?updated-max=${s}&max-results=${postperpage}#PageNo=${nopage}`;
+    location.href = r;
 }
 
-function finddatepost(data) {
-    var post = data.feed.entry[0];
-    var publishedDate = post.published.$t.substring(0, 19) + post.published.$t.substring(23, 29);
-    var encodedDate = encodeURIComponent(publishedDate);
-    var redirectUrl = (jenis === "page") 
-        ? `/search?updated-max=${encodedDate}&max-results=${postperpage}#PageNo=${nopage}` 
-        : `/search/label/${lblname1}?updated-max=${encodedDate}&max-results=${postperpage}#PageNo=${nopage}`;
-    
-    location.href = redirectUrl;
-}
+// Inicialización
+let nopage, jenis, nomerhal, lblname1;
+halamanblogger();
+
 
 // Inicializar la paginación
 var nopage, jenis, nomerhal, lblname1;
